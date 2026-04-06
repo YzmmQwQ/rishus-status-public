@@ -8,7 +8,7 @@ export async function onRequest({ request, env }) {
             headers: request.headers
         });
 
-        const response = await env['rishus-status-worker'].fetch(workerRequest);
+        const response = await env.API.fetch(workerRequest);
         return response;
     } catch (error) {
         return new Response(JSON.stringify({
