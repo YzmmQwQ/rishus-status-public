@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rishu's Status Page</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dotted-bg"></div>
+
+    <nav class="top-bar">
+        <a href="https://status.rishu.cfd" class="site-title">STATUS.RISHU.CFD</a>
+        <div class="nav-right">
+            <a href="https://rishu.cfd" class="nav-link" target="_blank">MAIN</a>
+            <a href="https://docs.rishu.cfd" class="nav-link" target="_blank">DOCS</a>
+            <div class="lang-selector">
+                <button class="lang-btn" onclick="toggleLangMenu()">
+                    <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span id="currentLang">中文</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <div class="lang-menu-header" data-i18n="langHint">蛤？还有多语言呐？</div>
+                    <button onclick="setLang('zh')">中文</button>
+                    <button onclick="setLang('en')">English</button>
+                    <button onclick="setLang('ja')">日本語</button>
+                </div>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span id="themeText">DARK</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-label">WEBSITES</div>
+
+        <!-- 网站状态 -->
+        <div class="status-grid" id="websites">
+            <div class="status-item">
+                <div class="status-header">
+                    <span class="status-name" data-i18n="loading">加载中...</span>
+                    <span class="status-dot checking"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">SERVER RESOURCES</div>
+
+        <!-- 服务器资源 -->
+        <div class="resources-grid">
+            <!-- CPU 大格 -->
+            <div class="cpu-block">
+                <div class="label"><span class="label-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> CPU</span><span class="label-detail"><span id="cpuModel">--</span> · <span id="cpuSpeed">--</span>GHz · <span id="cpuCores">--</span></span></div>
+                <div class="cpu-value" id="cpuValue">--</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="cpuBar"></div>
+                </div>
+                <div class="cpu-grid" id="cpuGrid"></div>
+            </div>
+            <!-- 内存和运行时间 -->
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label"><span class="label-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/><line x1="14" y1="10" x2="14" y2="14"/><line x1="18" y1="10" x2="18" y2="14"/></svg> MEMORY</span><span class="label-detail" id="memTotal">--</span></div>
+                    <div class="value" id="memValue">--</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="memBar"></div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="uptime-load-row">
+                        <div class="uptime-section">
+                            <div class="label"><span class="label-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> UPTIME</span></div>
+                            <div class="uptime-grid" id="uptimeGrid">
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="uptime1">--</div>
+                                    <div class="uptime-unit" id="uptimeUnit1">--</div>
+                                </div>
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="uptime2">--</div>
+                                    <div class="uptime-unit" id="uptimeUnit2">--</div>
+                                </div>
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="uptime3">--</div>
+                                    <div class="uptime-unit" id="uptimeUnit3">--</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vertical-divider"></div>
+                        <div class="load-section">
+                            <div class="label"><span class="label-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> LOAD</span></div>
+                            <div class="load-grid">
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="load1">--</div>
+                                    <div class="uptime-unit">1M</div>
+                                </div>
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="load5">--</div>
+                                    <div class="uptime-unit">5M</div>
+                                </div>
+                                <div class="uptime-item">
+                                    <div class="uptime-value" id="load15">--</div>
+                                    <div class="uptime-unit">15M</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">MINECRAFT SERVERS</div>
+
+        <!-- Minecraft 服务器 -->
+        <div class="mc-grid" id="mcServers">
+            <div class="loading-item">
+                <div class="status-header">
+                    <span class="status-name" data-i18n="loading">加载中...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 刷新信息 -->
+        <div class="footer">
+            <div class="refresh-info">
+                <span data-i18n="refreshEvery">每 <span id="refreshInterval">10</span> 秒自动刷新</span>
+            </div>
+            <div class="last-update">
+                <span data-i18n="lastUpdate">最后更新</span>: <span id="lastUpdate">--</span>
+            </div>
+            <a href="https://yz-mm.top" target="_blank" class="footer-link">Made by YZMM</a>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
