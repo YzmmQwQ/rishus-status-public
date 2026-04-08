@@ -1,7 +1,7 @@
 // 配置
 const CONFIG = {
     apiBase: '/api',
-    refreshInterval: 10000,
+    refreshInterval: 60000,
     devMode: false
 };
 
