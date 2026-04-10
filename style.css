@@ -356,19 +356,19 @@ body {
 }
 
 .dark .cpu-core.level-1 {
-    background: #56D364;
+    background: #033A16;
 }
 
 .dark .cpu-core.level-2 {
-    background: #2EA043;
-}
-
-.dark .cpu-core.level-3 {
     background: #196C2E;
 }
 
+.dark .cpu-core.level-3 {
+    background: #2EA043;
+}
+
 .dark .cpu-core.level-4 {
-    background: #033A16;
+    background: #56D364;
 }
 
 .info-grid {
