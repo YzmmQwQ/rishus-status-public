@@ -355,7 +355,7 @@ async function updateServerResources() {
                     <span class="status-dot ${service.online ? 'online' : 'offline'}"></span>
                 </div>
                 <div class="status-value">${service.online ? t('online') : t('offline')}</div>
-                <div class="status-detail">${service.online ? '✓ 可用' : '✗ 不可用'}</div>
+                <div class="status-detail">${service.online ? '✓ Available' : '✗ Unavailable'}</div>
             `;
             localServicesContainer.appendChild(div);
         }
