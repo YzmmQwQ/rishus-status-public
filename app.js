@@ -355,7 +355,6 @@ async function updateServerResources() {
                     <span class="status-dot ${service.online ? 'online' : 'offline'}"></span>
                 </div>
                 <div class="status-value">${service.online ? t('online') : t('offline')}</div>
-                <div class="status-detail">${service.host}:${service.port}</div>
             `;
             localServicesContainer.appendChild(div);
         }
