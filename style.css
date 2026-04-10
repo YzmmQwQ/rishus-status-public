@@ -351,6 +351,26 @@ body {
     background: #116329;
 }
 
+.dark .cpu-core {
+    background: #151B23;
+}
+
+.dark .cpu-core.level-1 {
+    background: #56D364;
+}
+
+.dark .cpu-core.level-2 {
+    background: #2EA043;
+}
+
+.dark .cpu-core.level-3 {
+    background: #196C2E;
+}
+
+.dark .cpu-core.level-4 {
+    background: #033A16;
+}
+
 .info-grid {
     display: flex;
     flex-direction: column;
