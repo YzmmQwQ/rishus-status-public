@@ -343,7 +343,7 @@ async function updateServerResources() {
     const localServicesContainer = document.getElementById('localServices');
     const localServicesLabel = document.getElementById('localServicesLabel');
     if (data.localServices && data.localServices.length > 0) {
-        localServicesLabel.style.display = 'block';
+        localServicesLabel.removeAttribute('hidden');
         localServicesContainer.innerHTML = '';
 
         for (const service of data.localServices) {
@@ -360,7 +360,7 @@ async function updateServerResources() {
             localServicesContainer.appendChild(div);
         }
     } else {
-        localServicesLabel.style.display = 'none';
+        localServicesLabel.setAttribute('hidden', '');
         localServicesContainer.innerHTML = '';
     }
 
