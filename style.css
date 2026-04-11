@@ -137,6 +137,7 @@ body {
 .nav-link {
     display: flex;
     align-items: center;
+    gap: 6px;
     padding: 0 10px;
     background: var(--bg);
     border: 1px solid var(--stroke);
@@ -149,6 +150,12 @@ body {
     text-decoration: none;
     height: 31px;
     transition: all 0.15s ease;
+}
+
+.nav-link svg {
+    display: none;
+    width: 14px;
+    height: 14px;
 }
 
 .nav-link:hover {
