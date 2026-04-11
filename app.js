@@ -298,6 +298,14 @@ async function updateServerResources() {
     memBar.style.width = `${memPercent}%`;
     memBar.className = `progress-fill ${getProgressClass(memPercent)}`;
 
+    // 内存详细信息
+    const memInfoEl = document.getElementById('memInfo');
+    if (mem.type && mem.sizeText) {
+        memInfoEl.textContent = `${mem.type} ${mem.sizeText}`;
+    } else {
+        memInfoEl.textContent = '';
+    }
+
     // Uptime
     if (data.uptime) {
         const totalSeconds = Math.floor(data.uptime);
