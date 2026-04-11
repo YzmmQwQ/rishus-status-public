@@ -300,11 +300,11 @@ async function updateServerResources() {
 
     // 内存详细信息
     const memInfoEl = document.getElementById('memInfo');
-    if (mem.type && mem.sizeText) {
-        memInfoEl.textContent = `${mem.type} ${mem.sizeText}`;
-    } else {
-        memInfoEl.textContent = '';
-    }
+    const memParts = [];
+    if (mem.type) memParts.push(mem.type);
+    if (mem.sizeText) memParts.push(mem.sizeText);
+    if (mem.speed) memParts.push(`${mem.speed}MT/s`);
+    memInfoEl.textContent = memParts.join(' · ') || '';
 
     // Uptime
     if (data.uptime) {
