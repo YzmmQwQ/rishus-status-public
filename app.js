@@ -293,7 +293,6 @@ async function updateServerResources() {
     const mem = data.memory || {};
     const memPercent = mem.percent || 0;
     document.getElementById('memValue').textContent = `${formatBytes(mem.used)} / ${formatBytes(mem.total)}`;
-    document.getElementById('memTotal').textContent = formatBytes(mem.total);
     const memBar = document.getElementById('memBar');
     memBar.style.width = `${memPercent}%`;
     memBar.className = `progress-fill ${getProgressClass(memPercent)}`;
@@ -301,9 +300,9 @@ async function updateServerResources() {
     // 内存详细信息
     const memInfoEl = document.getElementById('memInfo');
     if (mem.info) {
-        memInfoEl.textContent = ' · ' + mem.info;
+        memInfoEl.textContent = mem.info;
     } else {
-        memInfoEl.textContent = '';
+        memInfoEl.textContent = formatBytes(mem.total);
     }
 
     // Uptime
