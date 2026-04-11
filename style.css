@@ -497,12 +497,6 @@ body {
     margin-top: 4px;
 }
 
-.mem-info {
-    font-size: 11px;
-    color: var(--fg-tertiary);
-    margin-top: 6px;
-}
-
 /* Progress Bar */
 .progress-bar {
     height: 4px;
