@@ -339,31 +339,6 @@ async function updateServerResources() {
         document.getElementById('load15').textContent = data.load[2]?.toFixed(1) || '--';
     }
 
-    // 本地服务状态
-    const localServicesContainer = document.getElementById('localServices');
-    const localServicesLabel = document.getElementById('localServicesLabel');
-    if (data.localServices && data.localServices.length > 0) {
-        localServicesLabel.removeAttribute('hidden');
-        localServicesContainer.innerHTML = '';
-
-        for (const service of data.localServices) {
-            const div = document.createElement('div');
-            div.className = 'status-item';
-            div.innerHTML = `
-                <div class="status-header">
-                    <span class="status-name">${service.name}</span>
-                    <span class="status-dot ${service.online ? 'online' : 'offline'}"></span>
-                </div>
-                <div class="status-value">${service.online ? t('online') : t('offline')}</div>
-                <div class="status-detail">${service.online ? 'Available' : 'Unavailable'}</div>
-            `;
-            localServicesContainer.appendChild(div);
-        }
-    } else {
-        localServicesLabel.setAttribute('hidden', '');
-        localServicesContainer.innerHTML = '';
-    }
-
     return result?.updatedAt;
 }
 
