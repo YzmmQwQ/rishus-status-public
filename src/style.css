@@ -861,6 +861,10 @@ body::-webkit-scrollbar {
         padding: 80px 16px 32px;
     }
 
+    .side-scroll-indicator {
+        display: none;
+    }
+
     .resources-grid {
         grid-template-columns: 1fr;
     }
