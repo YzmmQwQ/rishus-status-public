@@ -23,8 +23,8 @@ const translations = {
   },
   en: {
     langHint: 'Huh? Multiple languages?',
-    online: 'Online',
-    offline: 'Offline',
+    online: 'ONLINE',
+    offline: 'OFFLINE',
     loading: 'Loading...',
     fetchError: 'Request Failed',
     serverError: 'Failed to get server status',
