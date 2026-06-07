@@ -10,20 +10,18 @@
 - 多语言支持 (中文/English/日本語)
 - 明暗主题切换
 
-## 部署
+## 技术栈
 
-上传到 Cloudflare Pages 或任何静态托管。
+Vite + Vue 3。API 由 Cloudflare Pages Function (`functions/api/[[path]].js`) 代理到 Worker。
 
-## 配置
+## 开发
 
-编辑 `app.js` 中的 `CONFIG`：
-
-```javascript
-const CONFIG = {
-    apiBase: '/api',  // API 地址
-    refreshInterval: 10000,  // 刷新间隔(毫秒)
-    devMode: false  // 生产环境设为 false
-};
+```bash
+npm install
+npm run dev      # 本地开发（mock 数据，/api 代理到 status.rishu.cfd）
+npm run build    # 构建到 dist/
+npm run preview  # wrangler pages dev dist（本地验证 Function）
+npm run deploy   # 构建并部署到 Cloudflare Pages
 ```
 
 ## License

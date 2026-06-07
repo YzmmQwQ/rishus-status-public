@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Regular.min.css');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Medium.min.css');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Semibold.min.css');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Bold.min.css');
+
+@font-face {
+    font-family: 'MiSans';
+    src: url('/fonts/MiSans-subset.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+}
 
 * {
     margin: 0;
@@ -68,15 +71,29 @@
     --accent-negative-bg: rgba(255, 71, 87, 0.16);
 }
 
-/* 英文字体优先，中文回退到系统字体 */
+/* 英文字体优先，中文回退到 MiSans 子集再到系统字体；与顶栏按钮统一字重 500 */
 body {
-    font-family: 'MiSans', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 400;
+    font-family: 'IBM Plex Sans', 'MiSans', sans-serif;
+    font-weight: 500;
     background: var(--bg);
     color: var(--fg);
     min-height: 100vh;
     line-height: 1.25;
     -webkit-font-smoothing: antialiased;
+}
+
+/* 隐藏原生滚动条 */
+html {
+    scrollbar-width: none;
+}
+
+body {
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /* Dotted background */
@@ -92,6 +109,40 @@ body {
 
 .dark .dotted-bg {
     opacity: 0.2;
+}
+
+/* Scroll progress */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 300;
+    width: 100%;
+    height: 2px;
+    background: var(--fg);
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
+}
+
+.side-scroll-indicator {
+    position: fixed;
+    top: 72px;
+    right: 12px;
+    bottom: 24px;
+    z-index: 90;
+    width: 3px;
+    background: var(--fill);
+    pointer-events: none;
+}
+
+.side-scroll-indicator span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--fg);
+    transform: scaleY(0.08);
+    transform-origin: top center;
 }
 
 /* Container */
@@ -126,6 +177,10 @@ body {
     color: var(--fg);
     text-decoration: none;
     text-transform: uppercase;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
 .nav-right {
@@ -168,7 +223,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'IBM Plex Sans', 'MiSans', sans-serif;
     font-size: 12px;
     font-weight: 500;
     color: var(--fg-tertiary);
@@ -483,7 +538,7 @@ body {
 }
 
 .label-detail {
-    font-weight: 400;
+    font-weight: 500;
     text-transform: none;
     letter-spacing: 0;
     color: var(--fg-tertiary);
@@ -657,27 +712,33 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'IBM Plex Sans', 'MiSans', sans-serif;
     font-size: 12px;
+    font-weight: 500;
     color: var(--fg-tertiary);
 }
 
-.last-update, .refresh-info {
+.last-update, .refresh-info, .footer-credit {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+/* "Made by" 灰色，YZMM 黑色下划线链接 */
+.footer-credit {
+    color: var(--fg-tertiary);
 }
 
 .footer-link {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--fg-tertiary);
+    color: var(--fg);
+    border-bottom: 1px solid var(--stroke);
     text-decoration: none;
-    transition: color 0.15s;
+    transition: color 0.15s, border-color 0.15s;
 }
 
 .footer-link:hover {
-    color: var(--fg);
+    color: var(--accent-main);
+    border-color: var(--accent-main);
 }
 
 /* Language Selector */
@@ -859,4 +920,129 @@ body {
     .nav-right {
         gap: 8px;
     }
+}
+
+/* 黑色数据数值使用 MiSans（如 CPU 占用率、内存、运行时间、玩家数） */
+.cpu-value,
+.info-item .value,
+.uptime-value,
+.mc-players {
+    font-family: 'MiSans', 'IBM Plex Sans', sans-serif;
+}
+
+/* Scroll Reveal */
+.reveal-block {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-block.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-block {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Custom Cursor */
+.cursor {
+    --cursor-width: 26px;
+    --cursor-height: 26px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--cursor-width);
+    height: var(--cursor-height);
+    pointer-events: none;
+    z-index: 10000;
+    background: transparent;
+    mix-blend-mode: difference;
+    transition:
+        width 0.25s cubic-bezier(0.8, 0, 0.2, 1),
+        height 0.25s cubic-bezier(0.8, 0, 0.2, 1),
+        opacity 0.2s ease;
+    will-change: transform;
+    display: none;
+}
+
+.cursor span {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: #fff;
+    transition:
+        width 0.25s cubic-bezier(0.8, 0, 0.2, 1),
+        height 0.25s cubic-bezier(0.8, 0, 0.2, 1);
+}
+
+body.has-custom-cursor .cursor {
+    display: block;
+}
+
+.cursor span:nth-child(1) {
+    top: 0;
+    left: 0;
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+}
+
+.cursor span:nth-child(2) {
+    top: 0;
+    right: 0;
+    border-top: 2px solid #fff;
+    border-right: 2px solid #fff;
+}
+
+.cursor span:nth-child(3) {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid #fff;
+    border-left: 2px solid #fff;
+}
+
+.cursor span:nth-child(4) {
+    right: 0;
+    bottom: 0;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+.cursor.is-hover span {
+    width: 16px;
+    height: 16px;
+}
+
+.cursor.is-hidden {
+    opacity: 0;
+}
+
+body.has-custom-cursor,
+body.has-custom-cursor * {
+    cursor: none !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+    .cursor {
+        display: none !important;
+    }
+}
+
+/* Magnetic top-bar buttons */
+.is-magnetic {
+    --mx: 0;
+    --my: 0;
+    transform: translate(calc(var(--mx) * 1px), calc(var(--my) * 1px));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-magnetic:active {
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
