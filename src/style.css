@@ -32,8 +32,8 @@
     --fg-tertiary: #707070;
     --fg-inverted: #ffffff;
 
-    --accent-main: #ff8800;
-    --accent-main-bg: rgba(255, 136, 0, 0.16);
+    --accent-main: #e56f00;
+    --accent-main-bg: rgba(229, 111, 0, 0.16);
 
     --accent-positive: #00d992;
     --accent-positive-bg: rgba(0, 217, 146, 0.16);
@@ -94,6 +94,19 @@ body {
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
     display: none;
+}
+
+/* 自定义选中文字颜色 */
+::selection {
+    background: var(--accent-main-bg);
+    color: var(--accent-main);
+    text-shadow: none;
+}
+
+::-moz-selection {
+    background: var(--accent-main-bg);
+    color: var(--accent-main);
+    text-shadow: none;
 }
 
 /* Dotted background */
