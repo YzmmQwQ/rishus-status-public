@@ -19,10 +19,7 @@ const translations = {
     lastUpdate: '最后更新',
     visitSite: '访问网站',
     moreInfo: '更多信息',
-    onlinePlayers: '在线',
-    overviewOperational: '所有服务正常运行',
-    overviewDegraded: '{n} 个服务异常',
-    overviewLoading: '加载状态中...'
+    onlinePlayers: '在线'
   },
   en: {
     langHint: 'Huh? Multiple languages?',
@@ -35,10 +32,7 @@ const translations = {
     lastUpdate: 'Last update',
     visitSite: 'Visit',
     moreInfo: 'More info',
-    onlinePlayers: 'Online',
-    overviewOperational: 'All systems operational',
-    overviewDegraded: '{n} services degraded',
-    overviewLoading: 'Loading status...'
+    onlinePlayers: 'Online'
   },
   ja: {
     langHint: 'え？多言語対応なの？',
@@ -51,10 +45,7 @@ const translations = {
     lastUpdate: '最終更新',
     visitSite: '訪問',
     moreInfo: '詳細',
-    onlinePlayers: 'オンライン',
-    overviewOperational: 'すべてのシステムが正常',
-    overviewDegraded: '{n} つのサービスに問題',
-    overviewLoading: '状態を読み込み中...'
+    onlinePlayers: 'オンライン'
   }
 };
 
@@ -127,10 +118,8 @@ const currentLang = ref(localStorage.getItem('lang') || 'zh');
 const langMenuOpen = ref(false);
 const cursorEl = ref(null);
 const scrollProgress = ref(0);
-const nextRefreshIn = ref(60);
 
 let refreshTimer;
-let countdownTimer;
 let revealObserver;
 let scrollRAF;
 
@@ -241,24 +230,6 @@ const uptimeItems = computed(() => {
     startIndex = units.length - 3;
   }
   return units.slice(startIndex, startIndex + 3);
-});
-
-// Overview status
-const overview = computed(() => {
-  const offlineWebsites = websites.value.filter(w => w.status === 'offline').length;
-  const errorWebsites = websites.value.filter(w => w.status === 'error').length;
-  const offlineMC = mcServers.value.filter(s => !s.online).length;
-  const totalIssues = offlineWebsites + errorWebsites + offlineMC;
-
-  const totalWebsites = websites.value.length;
-  const totalMC = mcServers.value.length;
-
-  if (totalIssues === 0 && websites.value.length > 0) {
-    return { status: 'operational', issues: 0, totalWebsites, totalMC };
-  } else if (totalIssues > 0) {
-    return { status: 'degraded', issues: totalIssues, totalWebsites, totalMC };
-  }
-  return { status: 'loading', issues: 0, totalWebsites, totalMC };
 });
 
 const loadItems = computed(() => {
@@ -401,15 +372,6 @@ async function refreshAll() {
   ]);
   const latestTime = Math.max(websiteTime || 0, serverTime || 0, mcTime || 0);
   lastUpdate.value = formatTime(latestTime || Date.now());
-  nextRefreshIn.value = refreshSeconds;
-}
-
-function startCountdown() {
-  countdownTimer = window.setInterval(() => {
-    if (nextRefreshIn.value > 0) {
-      nextRefreshIn.value--;
-    }
-  }, 1000);
 }
 
 // Custom cursor
@@ -574,7 +536,6 @@ onMounted(async () => {
   initTheme();
   await refreshAll();
   refreshTimer = window.setInterval(refreshAll, REFRESH_INTERVAL);
-  startCountdown();
 
   handleScroll();
   document.addEventListener('click', handleDocumentClick);
@@ -585,7 +546,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.clearInterval(refreshTimer);
-  window.clearInterval(countdownTimer);
   window.cancelAnimationFrame(cursorRAF);
   window.cancelAnimationFrame(scrollRAF);
   revealObserver?.disconnect();
@@ -663,45 +623,6 @@ onBeforeUnmount(() => {
   </nav>
 
   <div class="container">
-    <!-- Overview -->
-    <div class="overview reveal-block" :class="{
-      'overview-operational': overview.status === 'operational',
-      'overview-degraded': overview.status === 'degraded',
-      'overview-loading': overview.status === 'loading'
-    }">
-      <div class="overview-corner overview-tl">STATUS.RISHU.CFD</div>
-      <div class="overview-corner overview-tr">{{ lastUpdate }}</div>
-
-      <pre class="overview-ascii">⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠤⠒⠒⠒⠒⠒⠠⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⡞⡽⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢯⢳⡀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢀⣔⣻⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢾⣿⠢⡀⠀⠀⠀⠀
-⠀⠀⢀⣾⣿⣶⡆⠀⠀⢐⡄⠀⠀⠀⠀⠐⠳⡀⠀⢸⣇⣧⡐⠀⠀⠀⠀⠀⠀
-⠀⢠⠏⠀⢹⣿⡇⠀⠀⠇⢀⢂⠀⠀⠀⡃⢀⠀⠘⣦⢸⡿⡟⠋⠁⡀⠀⠀⠀
-⠀⡋⠀⠀⠀⢹⣷⡀⡸⠀⠻⠀⠈⠒⠤⠃⠿⠀⢀⠻⣼⡇⠀⠀⠀⠀⢂⠀⠀
-⢀⠀⠀⠀⠀⠈⣿⠱⣿⣅⠀⠀⠸⣉⡹⠀⠀⢀⠞⡼⠀⣿⡀⠀⠀⠀⠀⠐⠀
-⠀⠀⠀⠀⠀⠀⣿⠀⢣⠀⠍⢶⣦⠤⢤⣖⠾⠠⣀⠇⠀⢹⡇⠀⠀⠀⠀⠀⠡
-⡁⠀⠀⠀⢀⡴⣏⣴⡑⣀⣴⠂⢸⠤⠼⡀⠱⡤⡨⢳⣦⣸⣷⠀⠀⠀⠀⠀⢡
-⠅⠀⠀⣴⡟⢷⣾⣿⡷⠳⠃⢠⠃⠀⠀⢣⣀⠡⡙⣿⣿⣿⠛⣦⡀⠀⠀⠀⢰
-⠂⠀⣼⡯⠃⠢⠽⠋⡴⠧⣀⡣⡀⠀⠀⢈⢄⣭⣇⠘⠿⠕⠥⠜⠻⠦⣀⠀⡇
-⠀⠉⠁⠀⠀⠀⡊⠉⢙⣿⡾⡶⠾⠶⣾⢕⢿⠟⠀⢠⠀⠀⠀⠀⠀⠀⠀⠀⠉
-⠀⠀⠀⠀⠀⠀⠐⢀⠼⠃⠀⠉⠉⠀⠂⠀⠈⠣⠄⠂⠀⠀⠀⠀⠀⠀⠀</pre>
-
-      <div class="overview-corner overview-bl">
-        <div class="overview-status-line">
-          <div class="overview-dot"></div>
-          <span v-if="overview.status === 'operational'">{{ t('overviewOperational') }}</span>
-          <span v-else-if="overview.status === 'degraded'">{{ t('overviewDegraded', { n: overview.issues }) }}</span>
-          <span v-else>{{ t('overviewLoading') }}</span>
-        </div>
-        <div class="overview-monitoring">{{ overview.totalWebsites }} WEBSITES · 1 SERVER · {{ overview.totalMC }} MC</div>
-      </div>
-
-      <div class="overview-corner overview-br">
-        <div class="overview-next">NEXT: {{ nextRefreshIn }}S</div>
-        <div class="overview-label">MONITORING</div>
-      </div>
-    </div>
-
     <div class="section-label">WEBSITES</div>
 
     <!-- 网站状态 -->
@@ -826,6 +747,12 @@ onBeforeUnmount(() => {
 
     <!-- 刷新信息 -->
     <div class="footer">
+      <div class="refresh-info">
+        <span>{{ t('refreshEvery', { n: refreshSeconds }) }}</span>
+      </div>
+      <div class="last-update">
+        <span>{{ t('lastUpdate') }}</span>: <span>{{ lastUpdate }}</span>
+      </div>
       <span class="footer-credit">Made by <a href="https://yz-mm.top" target="_blank" class="footer-link">YZMM</a></span>
     </div>
   </div>
